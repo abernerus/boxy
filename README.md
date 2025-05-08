@@ -1,10 +1,13 @@
 # Boxy Service
 
-A Java Spring Boot application for calculating optimal box sizes for item packaging. Boxy helps determine the smallest box that can efficiently contain a given set of items with different dimensions.
+A Java Spring Boot application for calculating optimal box sizes for item packaging. Boxy helps determine the smallest
+box that can efficiently contain a given set of items with different dimensions.
 
 ## Overview
 
-Boxy Service uses bin packing algorithms to solve the problem of efficiently packing items into standard-sized boxes. The service provides a RESTful API that accepts a list of items with quantities and returns the optimal box size required to contain them.
+Boxy Service uses bin packing algorithms to solve the problem of efficiently packing items into standard-sized boxes.
+The service provides a RESTful API that accepts a list of items with quantities and returns the optimal box size
+required to contain them.
 
 ## Running with Maven
 
@@ -20,7 +23,8 @@ Access swagger: http://localhost:8080/swagger-ui/index.html
 
 ## Features
 
-- **Bin Packing Algorithm**: Multi-pass algorithm with first-fit decreasing for larger items, gap filling, and random fill attempts
+- **Bin Packing Algorithm**: Multi-pass algorithm with first-fit decreasing for larger items, gap filling, and random
+  fill attempts
 - **Standard Box Sizes**: Pre-defined box dimensions (small, medium, large)
 - **Item Size Definitions**: Support for 8 standard item sizes with different widths
 - **Configurable Fill Factor**: Adjustable fill factor parameter to control packing density
@@ -32,11 +36,11 @@ Access swagger: http://localhost:8080/swagger-ui/index.html
 
 The service supports three standard box sizes:
 
-| Box Name | Label     | Dimensions |
-|----------|-----------|------------|
-| Box 1    | Box nr 1  | 4x5        |
-| Box 2    | Box nr 2  | 8x12       |
-| Box 3    | Box nr 3  | 12x20      |
+| Box Name | Label    | Dimensions |
+|----------|----------|------------|
+| Box 1    | Box nr 1 | 4x5        |
+| Box 2    | Box nr 2 | 8x12       |
+| Box 3    | Box nr 3 | 12x20      |
 
 If items cannot fit in any standard box, the service will return "Pickup required".
 
@@ -62,6 +66,7 @@ The following item types are available:
 **Endpoint:** `POST /calculate-size`
 
 **Request:**
+
 ```json
 {
   "items": [

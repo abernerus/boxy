@@ -7,7 +7,6 @@ import com.bernerus.boxy.api.v1.CalculateBoxSizeResponseV1;
 import com.bernerus.boxy.api.v1.Endpoints;
 import com.bernerus.boxy.api.v1.ErrorResponse;
 import com.bernerus.boxy.api.v1.ItemSizeV1;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.bernerus.boxy.api.v1.ItemSizeV1.ITEM_1;
 import static com.bernerus.boxy.api.v1.ItemSizeV1.ITEM_3;
@@ -45,7 +43,7 @@ public class BoxControllerIntegrationTest {
 
     @Test
     public void testCalculateBoxSize_WithValidRequest_ReturnsCorrectBoxSize() throws Exception {
-        
+
         CalculateBoxSizeRequestV1 request = CalculateBoxSizeRequestV1.builder()
                 .items(List.of(
                         ArticleQuantityV1.builder().item(ITEM_1).quantity(5).build(), // 1x1 size, 5 items
@@ -54,14 +52,14 @@ public class BoxControllerIntegrationTest {
                 .fillFactor(0.75)
                 .build();
 
-        
+
         MvcResult result = mockMvc.perform(post(Endpoints.Box.CALCULATE_BOX_SIZE_SUB_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        
+
         CalculateBoxSizeResponseV1 response = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
                 CalculateBoxSizeResponseV1.class
@@ -75,7 +73,7 @@ public class BoxControllerIntegrationTest {
 
     @Test
     public void testCalculateBoxSize_WithDefaultFillFactor_ReturnsCorrectBoxSize() throws Exception {
-        
+
         CalculateBoxSizeRequestV1 request = CalculateBoxSizeRequestV1.builder()
                 .items(List.of(
                         ArticleQuantityV1.builder().item(ITEM_1).quantity(5).build(), // 1x1 size, 5 items
@@ -83,14 +81,14 @@ public class BoxControllerIntegrationTest {
                 ))
                 .build(); // No fill factor specified, should use default
 
-        
+
         MvcResult result = mockMvc.perform(post(Endpoints.Box.CALCULATE_BOX_SIZE_SUB_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        
+
         CalculateBoxSizeResponseV1 response = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
                 CalculateBoxSizeResponseV1.class
@@ -129,7 +127,7 @@ public class BoxControllerIntegrationTest {
 
     @Test
     public void testCalculateBoxSize_WithLargeNumberOfItems_ReturnsCorrectBoxSize() throws Exception {
-        
+
         CalculateBoxSizeRequestV1 request = CalculateBoxSizeRequestV1.builder()
                 .items(List.of(
                         ArticleQuantityV1.builder().item(ITEM_1).quantity(20).build(),
@@ -139,14 +137,14 @@ public class BoxControllerIntegrationTest {
                 .fillFactor(0.8)
                 .build();
 
-        
+
         MvcResult result = mockMvc.perform(post(Endpoints.Box.CALCULATE_BOX_SIZE_SUB_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        
+
         CalculateBoxSizeResponseV1 response = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
                 CalculateBoxSizeResponseV1.class
@@ -158,7 +156,7 @@ public class BoxControllerIntegrationTest {
 
     @Test
     public void testCalculateBoxSize_WithInvalidArticleId_ReturnsBadRequest() throws Exception {
-        
+
         CalculateBoxSizeRequestV1 request = CalculateBoxSizeRequestV1.builder()
                 .items(List.of(
                         ArticleQuantityV1.builder().item(null).quantity(5).build() // Invalid article ID

@@ -31,8 +31,8 @@ public class BoxService {
         if (items.isEmpty()) {
             throw new BadRequestException("No items provided");
         }
-        
-        if(items.size() >= 100) {
+
+        if (items.size() >= 100) {
             return Box.BOX_PICKUP;
         }
 

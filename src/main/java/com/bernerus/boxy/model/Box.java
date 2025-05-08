@@ -16,11 +16,11 @@ public enum Box {
         this.width = width;
         this.height = height;
     }
-    
+
     public int getArea() {
         return width * height;
     }
-    
+
     public boolean hasAtLeastWidth(int width) {
         return this.width >= width;
     }

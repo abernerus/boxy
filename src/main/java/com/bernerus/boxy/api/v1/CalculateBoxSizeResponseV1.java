@@ -1,4 +1,3 @@
-
 package com.bernerus.boxy.api.v1;
 
 import io.swagger.v3.oas.annotations.media.Schema;
