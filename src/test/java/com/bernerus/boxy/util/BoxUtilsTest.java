@@ -123,20 +123,6 @@ class BoxUtilsTest {
         );
     }
 
-    // Helper method to generate a mix of items with different widths
-    private static List<ItemSize> generateMixedItems(int count, ItemSizeV1 min, ItemSizeV1 max) {
-        ItemSizeV1[] values = ItemSizeV1.values();
-        int minIdx = min.ordinal();
-        int maxIdx = max.ordinal();
-        List<ItemSize> items = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            int idx = minIdx + (i % (maxIdx - minIdx + 1));
-            ItemSizeV1 v = values[idx];
-            items.add(fromEnum(v));
-        }
-        return items;
-    }
-
     @ParameterizedTest(name = "{0}")
     @MethodSource("canBoxContainTestCases")
     @DisplayName("Test if a box can contain items")

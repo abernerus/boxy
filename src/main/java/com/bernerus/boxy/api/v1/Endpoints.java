@@ -1,5 +1,6 @@
 package com.bernerus.boxy.api.v1;
 
+@SuppressWarnings("unused")
 public final class Endpoints {
     private static final String BASE_PATH = "/api/v1";
     public static final String CALCULATE_BOX_SIZE = Box.BASE_PATH + Box.CALCULATE_BOX_SIZE_SUB_PATH;
