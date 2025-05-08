@@ -1,6 +1,9 @@
 package com.bernerus.boxy.api.v1;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -26,7 +29,11 @@ public class CalculateBoxSizeRequestV1 {
                     "If not provided, the default value from application properties will be used.",
             example = "0.75",
             defaultValue = "0.9",
+            maximum = "1.0",
+            minimum = "0.1",
             requiredMode = Schema.RequiredMode.NOT_REQUIRED
     )
+    @DecimalMin(value = "0.1", message = "Fill factor must be at least 0.1")
+    @DecimalMax(value = "1.0", message = "Fill factor must be at most 1.0")
     private Double fillFactor;
 }
