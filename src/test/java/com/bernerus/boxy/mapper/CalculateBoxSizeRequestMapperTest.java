@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ItemSizeMapperTest {
+class CalculateBoxSizeRequestMapperTest {
 
     @Test
     void mapsSingleItemCorrectly() {
@@ -24,7 +24,7 @@ class ItemSizeMapperTest {
                         .build()))
                 .build();
 
-        List<ItemSize> result = ItemSizeMapper.fromDto(req);
+        List<ItemSize> result = CalculateBoxSizeRequestMapper.toItemSizes(req);
 
         assertEquals(2, result.size());
         assertTrue(result.stream().allMatch(i -> i.width() == 4 && i.height() == 1));
@@ -39,7 +39,7 @@ class ItemSizeMapperTest {
                 ))
                 .build();
 
-        List<ItemSize> result = ItemSizeMapper.fromDto(req);
+        List<ItemSize> result = CalculateBoxSizeRequestMapper.toItemSizes(req);
 
         assertEquals(4, result.size());
         assertEquals(2, result.getFirst().width());
@@ -54,7 +54,7 @@ class ItemSizeMapperTest {
                 .items(List.of())
                 .build();
 
-        assertThrows(BadRequestException.class, () -> ItemSizeMapper.fromDto(req));
+        assertThrows(BadRequestException.class, () -> CalculateBoxSizeRequestMapper.toItemSizes(req));
     }
 
     @Test
@@ -63,7 +63,7 @@ class ItemSizeMapperTest {
                 .items(null)
                 .build();
 
-        assertThrows(BadRequestException.class, () -> ItemSizeMapper.fromDto(req));
+        assertThrows(BadRequestException.class, () -> CalculateBoxSizeRequestMapper.toItemSizes(req));
     }
 
     @Test
@@ -74,7 +74,7 @@ class ItemSizeMapperTest {
                 ))
                 .build();
 
-        assertThrows(BadRequestException.class, () -> ItemSizeMapper.fromDto(req));
+        assertThrows(BadRequestException.class, () -> CalculateBoxSizeRequestMapper.toItemSizes(req));
     }
 
     @Test
@@ -85,7 +85,7 @@ class ItemSizeMapperTest {
                 ))
                 .build();
 
-        assertThrows(BadRequestException.class, () -> ItemSizeMapper.fromDto(req));
+        assertThrows(BadRequestException.class, () -> CalculateBoxSizeRequestMapper.toItemSizes(req));
     }
 
     @Test
@@ -96,6 +96,6 @@ class ItemSizeMapperTest {
                 ))
                 .build();
 
-        assertThrows(BadRequestException.class, () -> ItemSizeMapper.fromDto(req));
+        assertThrows(BadRequestException.class, () -> CalculateBoxSizeRequestMapper.toItemSizes(req));
     }
 }

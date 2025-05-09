@@ -3,15 +3,20 @@ package com.bernerus.boxy.mapper;
 import com.bernerus.boxy.api.BadRequestException;
 import com.bernerus.boxy.api.v1.CalculateBoxSizeRequestV1;
 import com.bernerus.boxy.api.v1.ItemSizeV1;
+import com.bernerus.boxy.config.DefaultFillProperties;
+import com.bernerus.boxy.model.FillSettings;
 import com.bernerus.boxy.model.ItemSize;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 
-public class ItemSizeMapper {
+public class CalculateBoxSizeRequestMapper {
+    private CalculateBoxSizeRequestMapper() {
+        //Not to be instantiated
+    }
 
-    public static List<ItemSize> fromDto(CalculateBoxSizeRequestV1 request) {
+    public static List<ItemSize> toItemSizes(CalculateBoxSizeRequestV1 request) {
         if (request.getItems() == null || request.getItems().isEmpty()) {
             throw new BadRequestException("No items provided");
         }
@@ -32,5 +37,20 @@ public class ItemSizeMapper {
                 .toList();
     }
 
+    public static FillSettings toFillSettings(CalculateBoxSizeRequestV1 request, DefaultFillProperties defaults) {
+        double fillFactor = request.getFillFactor() != null
+                ? request.getFillFactor()
+                : defaults.getFillFactor();
 
-}
+        int extraFillAttempts = request.getExtraFillAttempts() != null
+                ? request.getExtraFillAttempts()
+                : defaults.getExtraAttempts();
+
+        return FillSettings.builder()
+                .fillFactor(fillFactor)
+                .randomFillAttempts(extraFillAttempts)
+                .build();
+    }
+
+
+    }

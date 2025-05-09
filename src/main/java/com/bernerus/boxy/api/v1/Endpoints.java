@@ -8,6 +8,10 @@ public final class Endpoints {
     public static class Box {
         public static final String BASE_PATH = Endpoints.BASE_PATH + "/box";
         public static final String CALCULATE_BOX_SIZE_SUB_PATH = "/calculate-size";
+
+        private Box() {
+            //Not to be instantiated
+        }
     }
 
     private Endpoints() {

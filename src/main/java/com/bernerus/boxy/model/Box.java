@@ -20,8 +20,4 @@ public enum Box {
     public int getArea() {
         return width * height;
     }
-
-    public boolean hasAtLeastWidth(int width) {
-        return this.width >= width;
-    }
 }

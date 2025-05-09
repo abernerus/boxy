@@ -2,6 +2,7 @@ package com.bernerus.boxy.util;
 
 import com.bernerus.boxy.api.v1.ItemSizeV1;
 import com.bernerus.boxy.model.Box;
+import com.bernerus.boxy.model.FillSettings;
 import com.bernerus.boxy.model.ItemSize;
 import lombok.Builder;
 import org.junit.jupiter.api.DisplayName;
@@ -17,8 +18,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class BoxUtilsTest {
 
     @Builder
-    record BoxContainmentTestCase(String name, Box box, List<ItemSize> items, double fillFactor,
+    record BoxContainmentTestCase(String name, Box box, List<ItemSize> items, FillSettings fillSettings,
                                   boolean expectedResult) {
+    }
+
+    private static FillSettings defaultFillSettings() {
+        return FillSettings.builder()
+                .fillFactor(0.9)
+                .randomFillAttempts(10)
+                .build();
     }
 
     // Helper to convert enum to ItemSize
@@ -33,7 +41,7 @@ class BoxUtilsTest {
                         .name("Empty box should contain no items")
                         .box(Box.BOX_1)
                         .items(List.of())
-                        .fillFactor(0.9)
+                        .fillSettings(defaultFillSettings())
                         .expectedResult(true)
                         .build(),
 
@@ -41,7 +49,7 @@ class BoxUtilsTest {
                         .name("Single item smaller than box should fit")
                         .box(Box.BOX_1)
                         .items(List.of(fromEnum(ItemSizeV1.ITEM_3))) // 4x1
-                        .fillFactor(0.9)
+                        .fillSettings(defaultFillSettings())
                         .expectedResult(true)
                         .build(),
 
@@ -49,7 +57,7 @@ class BoxUtilsTest {
                         .name("Single item wider than box should not fit")
                         .box(Box.BOX_1)
                         .items(List.of(fromEnum(ItemSizeV1.ITEM_8))) // 12x1 (too wide for BOX_1)
-                        .fillFactor(0.9)
+                        .fillSettings(defaultFillSettings())
                         .expectedResult(false)
                         .build(),
 
@@ -61,7 +69,7 @@ class BoxUtilsTest {
                                 fromEnum(ItemSizeV1.ITEM_1),
                                 fromEnum(ItemSizeV1.ITEM_1)
                         ))
-                        .fillFactor(0.9)
+                        .fillSettings(defaultFillSettings())
                         .expectedResult(true)
                         .build(),
 
@@ -73,7 +81,7 @@ class BoxUtilsTest {
                                 fromEnum(ItemSizeV1.ITEM_6),
                                 fromEnum(ItemSizeV1.ITEM_6)
                         ))
-                        .fillFactor(0.9)
+                        .fillSettings(defaultFillSettings())
                         .expectedResult(true)
                         .build(),
 
@@ -88,7 +96,7 @@ class BoxUtilsTest {
                                 fromEnum(ItemSizeV1.ITEM_4),
                                 fromEnum(ItemSizeV1.ITEM_4)
                         ))
-                        .fillFactor(0.9)
+                        .fillSettings(defaultFillSettings())
                         .expectedResult(false)
                         .build(),
 
@@ -101,7 +109,7 @@ class BoxUtilsTest {
                                 fromEnum(ItemSizeV1.ITEM_1),
                                 fromEnum(ItemSizeV1.ITEM_1)
                         ))
-                        .fillFactor(0.9)
+                        .fillSettings(defaultFillSettings())
                         .expectedResult(true)
                         .build(),
 
@@ -117,7 +125,7 @@ class BoxUtilsTest {
                                 fromEnum(ItemSizeV1.ITEM_3),
                                 fromEnum(ItemSizeV1.ITEM_3)
                         ))
-                        .fillFactor(0.9)
+                        .fillSettings(defaultFillSettings())
                         .expectedResult(false)
                         .build()
         );
@@ -138,7 +146,7 @@ class BoxUtilsTest {
                 testCase.box,
                 sortedItems,
                 totalItemArea,
-                testCase.fillFactor
+                testCase.fillSettings
         );
 
         assertEquals(testCase.expectedResult, result,

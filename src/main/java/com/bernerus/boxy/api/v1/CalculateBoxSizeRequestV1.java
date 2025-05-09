@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +32,24 @@ public class CalculateBoxSizeRequestV1 {
                     "If not provided, the default value from application properties will be used.",
             example = "0.75",
             defaultValue = "0.9",
-            maximum = "1.0",
             minimum = "0.1",
+            maximum = "1.0",
             requiredMode = Schema.RequiredMode.NOT_REQUIRED
     )
     @DecimalMin(value = "0.1", message = "Fill factor must be at least 0.1")
     @DecimalMax(value = "1.0", message = "Fill factor must be at most 1.0")
+    @Nullable
     private Double fillFactor;
+    
+    @Schema(
+            description = "Optional fill factor (0.0-1.0) for random fill attempts. " +
+                    "If not provided, the default value from application properties will be used.",
+            example = "0.75",
+            defaultValue = "0.9",
+            maximum = "100",
+            requiredMode = Schema.RequiredMode.NOT_REQUIRED
+    )
+    @DecimalMax(value = "100", message = "Extra fill attempts cannot be more than 100")
+    @Nullable
+    private Integer extraFillAttempts;
 }

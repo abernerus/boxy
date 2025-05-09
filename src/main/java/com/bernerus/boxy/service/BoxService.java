@@ -2,6 +2,7 @@ package com.bernerus.boxy.service;
 
 import com.bernerus.boxy.api.BadRequestException;
 import com.bernerus.boxy.model.Box;
+import com.bernerus.boxy.model.FillSettings;
 import com.bernerus.boxy.model.ItemSize;
 import com.bernerus.boxy.util.BoxUtils;
 import org.springframework.lang.NonNull;
@@ -23,11 +24,12 @@ public class BoxService {
     /**
      * Calculates the smallest box that can contain all the given items
      *
-     * @param items      the list of items to calculate metrics for
-     * @param fillFactor the fill factor threshold for random fill attempts (0.0-1.0)
+     * @param items        the list of items to calculate metrics for
+     * @param fillSettings the fill settings including the fill factor threshold for random fill attempts (0.0-1.0)
      * @return the smallest suitable box or BOX_PICKUP if no box fits
      */
-    public Box calculateSmallestBoxFor(@NonNull List<ItemSize> items, double fillFactor) {
+    @NonNull
+    public Box calculateSmallestBoxFor(@NonNull List<ItemSize> items, FillSettings fillSettings) {
         if (items.isEmpty()) {
             throw new BadRequestException("No items provided");
         }
@@ -49,7 +51,7 @@ public class BoxService {
 
         // Remove boxes that are not wide enough
         List<Box> availableBoxes = BOXES.stream()
-                .filter(b -> b.hasAtLeastWidth(boxMinWidth))
+                .filter(box -> box.getWidth() >= boxMinWidth)
                 .toList();
 
         // Exit early if we have no boxes that fit
@@ -63,7 +65,7 @@ public class BoxService {
 
         // Find the first box that can contain all items
         Optional<Box> suitableBox = availableBoxes.stream()
-                .filter(box -> BoxUtils.canBoxContain(box, sortedItems, totalItemArea, fillFactor))
+                .filter(box -> BoxUtils.canBoxContain(box, sortedItems, totalItemArea, fillSettings))
                 .findFirst();
 
         return suitableBox.orElse(Box.BOX_PICKUP);

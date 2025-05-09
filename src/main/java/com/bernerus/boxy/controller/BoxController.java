@@ -3,10 +3,11 @@ package com.bernerus.boxy.controller;
 import com.bernerus.boxy.api.v1.CalculateBoxSizeRequestV1;
 import com.bernerus.boxy.api.v1.CalculateBoxSizeResponseV1;
 import com.bernerus.boxy.api.v1.Endpoints;
-import com.bernerus.boxy.config.BoxyProperties;
+import com.bernerus.boxy.config.DefaultFillProperties;
 import com.bernerus.boxy.mapper.BoxCalculationResponseMapper;
-import com.bernerus.boxy.mapper.ItemSizeMapper;
+import com.bernerus.boxy.mapper.CalculateBoxSizeRequestMapper;
 import com.bernerus.boxy.model.Box;
+import com.bernerus.boxy.model.FillSettings;
 import com.bernerus.boxy.model.ItemSize;
 import com.bernerus.boxy.service.BoxService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +29,7 @@ import java.util.List;
 public class BoxController {
 
     private final BoxService boxService;
-    private final BoxyProperties boxyProperties;
+    private final DefaultFillProperties defaultFillProperties;
 
     @Operation(
             summary = "Calculate the optimal box size for a set of items",
@@ -51,13 +52,12 @@ public class BoxController {
     })
     @PostMapping(Endpoints.Box.CALCULATE_BOX_SIZE_SUB_PATH)
     public ResponseEntity<CalculateBoxSizeResponseV1> calculateBoxSize(@Valid @RequestBody CalculateBoxSizeRequestV1 request) {
-        double fillFactor = request.getFillFactor() != null
-                ? request.getFillFactor()
-                : boxyProperties.getDefaultFillFactor();
+
 
         // Use the service to process items and return the result
-        List<ItemSize> items = ItemSizeMapper.fromDto(request);
-        Box box = boxService.calculateSmallestBoxFor(items, fillFactor);
+        List<ItemSize> items = CalculateBoxSizeRequestMapper.toItemSizes(request);
+        FillSettings fillSettings = CalculateBoxSizeRequestMapper.toFillSettings(request, defaultFillProperties);
+        Box box = boxService.calculateSmallestBoxFor(items, fillSettings);
 
         // Use the mapper to convert the result
         final CalculateBoxSizeResponseV1 response = BoxCalculationResponseMapper.toDto(box);

@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter
 public enum BoxSizeV1 {
     @Schema(description = "Box 1 - Small box (4x5)")
-    SIZE_4X5("Box nr 1", 1, 1),
+    SIZE_4X5("Box nr 1", 4, 5),
     @Schema(description = "Box 2 - Medium box (8x12)")
-    SIZE_8X12("Box nr 2", 1, 2),
+    SIZE_8X12("Box nr 2", 8, 12),
     @Schema(description = "Box 3 - Large box (12x20)")
-    SIZE_12X20("Box nr 3", 1, 4),
+    SIZE_12X20("Box nr 3", 12, 20),
     PICKUP_REQUIRED("Pickup required", 0, 0);
 
     private final String label;
