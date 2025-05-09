@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -37,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         classes = BoxyServiceApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 class BoxControllerIntegrationTest {
 
@@ -78,8 +80,9 @@ class BoxControllerIntegrationTest {
 
         CalculateBoxSizeRequestV1 request = CalculateBoxSizeRequestV1.builder()
                 .items(List.of(
-                        ArticleQuantityV1.builder().item(ITEM_1).quantity(5).build(), // 1x1 size, 5 items
-                        ArticleQuantityV1.builder().item(ITEM_3).quantity(2).build()  // 1x4 size, 2 items
+                        ArticleQuantityV1.builder().item(ITEM_1).quantity(5).build(),
+                        ArticleQuantityV1.builder().item(ITEM_3).quantity(2).build(),
+                        ArticleQuantityV1.builder().item(ITEM_5).quantity(1).build() 
                 ))
                 .fillFactor(0.75)
                 .build();
@@ -110,7 +113,8 @@ class BoxControllerIntegrationTest {
                         ArticleQuantityV1.builder().item(ITEM_1).quantity(5).build(),
                         ArticleQuantityV1.builder().item(ITEM_3).quantity(2).build(),
                         ArticleQuantityV1.builder().item(ITEM_4).quantity(4).build(),
-                        ArticleQuantityV1.builder().item(ITEM_6).quantity(2).build()
+                        ArticleQuantityV1.builder().item(ITEM_6).quantity(2).build(),
+                        ArticleQuantityV1.builder().item(ITEM_8).quantity(1).build()
                 ))
                 .fillFactor(1.0)
                 .extraFillAttempts(100)
@@ -135,13 +139,13 @@ class BoxControllerIntegrationTest {
     }
 
     @Test
-    void testCalculateBoxSize_WithValidRequest_ReturnsCorrectBoxSizeNr3_SecondPass() throws Exception {
+    void testCalculateBoxSize_WithValidFullRequest_ReturnsCorrectBoxSizeNr3() throws Exception {
 
         CalculateBoxSizeRequestV1 request = CalculateBoxSizeRequestV1.builder()
                 .items(List.of(
-                        ArticleQuantityV1.builder().item(ITEM_1).quantity(4).build(),
-                        ArticleQuantityV1.builder().item(ITEM_2).quantity(4).build(),
-                        ArticleQuantityV1.builder().item(ITEM_3).quantity(6).build(),
+                        ArticleQuantityV1.builder().item(ITEM_1).quantity(5).build(),
+                        ArticleQuantityV1.builder().item(ITEM_2).quantity(5).build(),
+                        ArticleQuantityV1.builder().item(ITEM_3).quantity(7).build(),
                         ArticleQuantityV1.builder().item(ITEM_4).quantity(9).build(),
                         ArticleQuantityV1.builder().item(ITEM_5).quantity(3).build(),
                         ArticleQuantityV1.builder().item(ITEM_6).quantity(8).build(),
@@ -152,10 +156,6 @@ class BoxControllerIntegrationTest {
                 .extraFillAttempts(100)
                 .build();
         
-        
-        System.out.println("Request area: " + request.getItems().stream().mapToInt(i -> i.getQuantity() * i.getItem().getWidth() * i.getItem().getHeight()).sum());
-        System.out.println("Box 3 area: " + BoxSizeV1.SIZE_12X20.getHeight() * BoxSizeV1.SIZE_12X20.getWidth());
-
         MvcResult result = mockMvc.perform(post(Endpoints.Box.CALCULATE_BOX_SIZE_SUB_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))

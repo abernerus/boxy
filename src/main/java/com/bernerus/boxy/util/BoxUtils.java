@@ -46,7 +46,7 @@ public class BoxUtils {
 
         // If no unplaced items, we're done
         if (unplacedItems.isEmpty()) {
-            log.info("First pass succeeded");
+            log.debug("First pass succeeded");
             return true;
         }
 
@@ -56,7 +56,7 @@ public class BoxUtils {
 
         // If the second pass succeeded, we're done
         if (secondPassSuccess) {
-            log.info("Second pass succeeded");
+            log.debug("Second pass succeeded");
             return true;
         }
 
@@ -64,7 +64,7 @@ public class BoxUtils {
             return false;
         }
 
-        log.info("Filling with random fill, total area: {}, box area: {}, fillSettings: {}", totalItemArea, box.getArea(), fillSettings);
+        log.debug("Filling with random fill, total area: {}, box area: {}, fillSettings: {}", totalItemArea, box.getArea(), fillSettings);
         // Try random fill if items take up less than the fill factor threshold
         if (totalItemArea <= box.getArea() * fillSettings.fillFactor()) {
             // Try chaos/random fill up to 10 times
@@ -73,7 +73,7 @@ public class BoxUtils {
                     .anyMatch(boxRows -> tryRandomFill(boxRows, sortedItems));
         }
         
-        log.info("Random fill failed");
+        log.debug("Random fill failed");
         return false;
     }
 
